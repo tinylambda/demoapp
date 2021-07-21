@@ -7,7 +7,7 @@ matrix:
       env: TOXENV=py38
     - python: 3.9
       env: TOXENV=py39
-    - python: pypy3
+    - python: pypy3.7-7.3.5
       env: TOXENV=pypy3
     - python: 3.9
       env: TOXENV=flake8
