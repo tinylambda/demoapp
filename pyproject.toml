@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools >= 45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "serial",
+]
+addopts = [
+    "--strict-markers"
+]
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+minversion = 3.24.0
+skipsdist = False
+isolated_build = True
+isolated_build_env = .package
+envlist=
+    py37
+    py38
+    py39
+    pypy3
+    flake8
+
+[testenv]
+deps =
+    py{37,38,39}: -r./tests/requirements/py3.txt
+    pypy3: -r./tests/requirements/py3.txt
+setenv =
+    PIP_INDEX_URL = https://pypi.tuna.tsinghua.edu.cn/simple
+    PIP_EXTRA_INDEX_URL = https://pypi.org/simple
+    PYTHONDONTWRITEBYTECODE = 1
+passenv = USER
+commands = pytest
+
+[testenv:py37]
+basepython = python3.7
+
+[testenv:py38]
+basepython = python3.8
+
+[testenv:py39]
+deps = {[testenv]deps}
+    pytest-cov
+basepython = python3.9
+commands = pytest --cov=demoapp
+
+[testenv:pypy3]
+basepython = pypy3
+
+[testenv:flake8]
+basepython = python3.9
+deps =
+    flake8
+changedir = {toxinidir}
+commands = flake8 demoapp
+"""
